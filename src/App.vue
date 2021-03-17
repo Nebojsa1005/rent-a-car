@@ -3,31 +3,31 @@
   <app-navigation></app-navigation>
   <router-view v-slot="{ Component }">
     <transition name="slide" mode="out-in">
-     <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
     </transition>
   </router-view>
 </template>
 
 <script>
-import appNavigation from './components/Header/Navigation.vue'
-import appBaseSpinner from './components/BaseSpinner/BaseSpinner.vue'
+import appNavigation from "./components/Header/Navigation.vue";
+import appBaseSpinner from "./components/BaseSpinner/BaseSpinner.vue";
 export default {
   components: {
     appNavigation,
-    appBaseSpinner
+    appBaseSpinner,
   },
   computed: {
-    loading () {
+    loading() {
       // return true
-      return this.$store.getters.loading
-    }
+      return this.$store.getters.loading;
+    },
   },
-  async mounted () {
-    await this.$store.dispatch('fetchCars')
-  }
-}
+  async mounted() {
+    await this.$store.dispatch("fetchCars");
+  },
+};
 </script>
 
 <style>
@@ -60,12 +60,11 @@ export default {
 }
 
 .form-page {
-  background: #eee
+  background: #eee;
 }
 /* ---------HEADING TITLE STYLE -------------- */
 .heading-title {
   margin: 20px 0;
-
 }
 /* ------------FORM STYLES ----------- */
 form {
@@ -76,7 +75,7 @@ form {
   justify-content: center;
 }
 
-label{
+label {
   width: 100%;
   text-align: left;
   margin-top: 10px;
@@ -93,14 +92,14 @@ select {
   outline: none;
   transition: all 0.3s ease;
   box-shadow: 3px 3px 4px gray;
-	-moz-box-shadow: 3px 3px 4px gray;
-	-webkit-box-shadow: 3px 3px 4px gray;  
+  -moz-box-shadow: 3px 3px 4px gray;
+  -webkit-box-shadow: 3px 3px 4px gray;
 }
 
 input:focus,
 input:hover,
 select:focus,
-select:hover{
+select:hover {
   width: 100%;
   border: 1px solid black;
   background: white;
@@ -119,7 +118,7 @@ select:hover{
   cursor: pointer;
 }
 
-.btn:hover, 
+.btn:hover,
 .btn:active {
   background: black;
   color: white;
@@ -134,13 +133,13 @@ button:disabled {
 }
 /* -------------ERRORS AND DISABLED BUTTONS STYLEs----------- */
 .errors-content {
-    width: 100%;
+  width: 100%;
 }
 
 .error-message {
-    text-align: center;
-    color: red;
-    margin: 5px 0;  
+  text-align: center;
+  color: red;
+  margin: 5px 0;
 }
 
 /* -----------ROUTER VIEW ANIMATION------------- */
@@ -152,15 +151,13 @@ button:disabled {
 .slide-enter-to,
 .slide-leave-from {
   opacity: 1;
-  transform: translateX(0)
-
+  transform: translateX(0);
 }
-
 
 .slide-enter-from,
 .slide-leave-to {
   opacity: 0;
-  transform: translateX(30px)
+  transform: translateX(30px);
 }
 
 /* -------------LIST ANIMATION--------------- */
@@ -180,7 +177,32 @@ button:disabled {
   transform: translateY(50px);
 }
 .fade-move {
-    transition: transform 0.3s ease
+  transition: transform 0.3s ease;
 }
 
+/* ===========MEDIA QUERIES =============== */
+
+@media (max-width: 1024px) {
+  form {
+    width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  form {
+    width: 60%;
+  }
+}
+
+@media (max-width: 425px) {
+  form {
+    width: 80%;
+  }
+}
+
+@media (max-width: 320px) {
+  form {
+    width: 90%;
+  }
+}
 </style>
