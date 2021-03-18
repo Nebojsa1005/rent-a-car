@@ -7,36 +7,43 @@ export default createStore({
     customers: [],
     carToEdit: null,
     customerToBeEdited: null,
-    loading: false
+    loading: false,
+    sideMenuActive: false
   },
   mutations: {
-    setCars( state, cars ) {
+    setCars(state, cars) {
       state.cars = cars
     },
-    setCustomers ( state, customers ) {
+    setCustomers(state, customers) {
       state.customers = customers
     },
-    setWantedCar ( state, id ) {
+    setWantedCar(state, id) {
       const filteredWantedCar = state.cars.filter(car => car.id === id)
       state.wantedCar = filteredWantedCar[0]
     },
-    carToEdit ( state, id ) {
+    carToEdit(state, id) {
       let wantedCar = state.cars.filter(car => car.id === id)
       state.carToEdit = wantedCar[0]
     },
-    customerToBeEdited ( state, id ) {
+    customerToBeEdited(state, id) {
       let wantedCustomer = state.customers.filter(customer => customer.id === id)
       state.customerToBeEdited = wantedCustomer[0]
     },
-    updateCarAvailability( state, id ) {
+    updateCarAvailability(state, id) {
       const wantedCar = state.cars.find(car => car.id === id)
       wantedCar.count--
     },
-    loadingOn ( state ) {
+    loadingOn(state) {
       state.loading = true
     },
-    loadingOff ( state ) {
+    loadingOff(state) {
       state.loading = false
+    },
+    activateSideMenu(state) {
+      state.sideMenuActive = !state.sideMenuActive
+    },
+    disableSideMenu(state) {
+      state.sideMenuActive = false
     }
   },
   actions: {
@@ -50,12 +57,12 @@ export default createStore({
         fetchedCars[car].id = car
         cars.push(fetchedCars[car])
       }
-     
+
       if (searchData) {
         let filteredCars = cars.filter(car => {
           return car.brand.toLowerCase().includes(searchData.toLowerCase()) || car.model.toLowerCase().includes(searchData.toLowerCase())
         })
-        cars = filteredCars 
+        cars = filteredCars
       }
       commit('setCars', cars)
     },
@@ -90,7 +97,7 @@ export default createStore({
       }
       commit('setCustomers', customers)
     },
-    async removeCar ({ dispatch }, carId) {
+    async removeCar({ dispatch }, carId) {
       await fetch(`https://rent-a-car-aef1c-default-rtdb.firebaseio.com/cars/${carId}.json`, {
         method: 'DELETE',
         headers: {
@@ -99,7 +106,7 @@ export default createStore({
       })
       await dispatch('fetchCars')
     },
-    async createCustomer ({ commit, dispatch }, newCustomer) {
+    async createCustomer({ commit, dispatch }, newCustomer) {
       commit('loadingOn')
       await fetch('https://rent-a-car-aef1c-default-rtdb.firebaseio.com/customers.json', {
         method: 'POST',
@@ -111,7 +118,7 @@ export default createStore({
       commit('loadingOff')
       await dispatch('fetchCustomers')
     },
-    order ({commit}, orderData) {
+    order({ commit }, orderData) {
       fetch('https://rent-a-car-aef1c-default-rtdb.firebaseio.com/orders.json', {
         method: 'POST',
         body: JSON.stringify(orderData),
@@ -120,7 +127,7 @@ export default createStore({
         }
       })
     },
-    updateCar ( { state, dispatch, commit }, carToRent) {
+    updateCar({ state, dispatch, commit }, carToRent) {
       fetch(`https://rent-a-car-aef1c-default-rtdb.firebaseio.com/cars/${carToRent.id}.json`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -130,9 +137,9 @@ export default createStore({
           'Content-type': 'application/json'
         }
       })
-      .then(() => dispatch('fetchCars'))
+        .then(() => dispatch('fetchCars'))
     },
-    async editCar ( { state, commit, dispatch }, carId) {
+    async editCar({ state, commit, dispatch }, carId) {
       commit('loadingOn')
       await fetch(`https://rent-a-car-aef1c-default-rtdb.firebaseio.com/cars/${carId}.json`, {
         method: 'PUT',
@@ -146,9 +153,9 @@ export default createStore({
       commit('loadingOff')
       dispatch('fetchCars')
     },
-    async updateCustomer ({ state, dispatch, commit }, data) {
-      let currentCustomer =  state.customers.find(customer => customer.id === data.customer.id)
-  
+    async updateCustomer({ state, dispatch, commit }, data) {
+      let currentCustomer = state.customers.find(customer => customer.id === data.customer.id)
+
       if (data.editingCustomer === true) {
         await fetch(`https://rent-a-car-aef1c-default-rtdb.firebaseio.com/customers/${currentCustomer.id}.json`, {
           method: 'PUT',
@@ -175,7 +182,7 @@ export default createStore({
 
       dispatch('fetchCustomers')
     },
-    async removeCustomer ({ commit, dispatch }, customerId) {
+    async removeCustomer({ commit, dispatch }, customerId) {
       await fetch(`https://rent-a-car-aef1c-default-rtdb.firebaseio.com/customers/${customerId}.json`, {
         method: 'DELETE',
         headers: {
@@ -186,23 +193,26 @@ export default createStore({
     }
   },
   getters: {
-    cars ( state ) {
+    cars(state) {
       return state.cars
     },
-    wantedCar (state) {
+    wantedCar(state) {
       return state.wantedCar
     },
-    customers ( state ) {
+    customers(state) {
       return state.customers
     },
-    carToEdit ( state ) {
+    carToEdit(state) {
       return state.carToEdit
     },
-    customerToBeEdited ( state ) {
+    customerToBeEdited(state) {
       return state.customerToBeEdited
     },
-    loading ( state ) {
+    loading(state) {
       return state.loading
+    },
+    sideMenuActive(state) {
+      return state.sideMenuActive
     }
   }
 })

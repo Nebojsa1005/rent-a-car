@@ -1,5 +1,6 @@
 <template>
   <app-base-spinner v-if="loading"></app-base-spinner>
+  <app-side-menu></app-side-menu>
   <app-navigation></app-navigation>
   <router-view v-slot="{ Component }">
     <transition name="slide" mode="out-in">
@@ -11,12 +12,14 @@
 </template>
 
 <script>
+import appSideMenu from "./components/UI/SideMenu.vue";
 import appNavigation from "./components/Header/Navigation.vue";
 import appBaseSpinner from "./components/BaseSpinner/BaseSpinner.vue";
 export default {
   components: {
     appNavigation,
     appBaseSpinner,
+    appSideMenu,
   },
   computed: {
     loading() {
@@ -57,6 +60,21 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* -------------NAVIGATION STYLES --------------*/
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+  text-decoration: none;
+  color: white;
+  transition: all 0.25s ease;
+}
+
+#nav a.router-link-active + hr,
+#nav a:hover + hr {
+  opacity: 1;
+  width: 100%;
 }
 
 .form-page {
